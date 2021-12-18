@@ -144,14 +144,6 @@ def simulate(lattice, beta, times):
     return states_evolution
 
 
-def evolution_plot():
-    """
-    DOCSTRING?
-    """
-    
-    figure = plt.figure(figsize=(30, 15), dpi=80)
-
-
 
 
 
