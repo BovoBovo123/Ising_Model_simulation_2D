@@ -6,44 +6,55 @@ Created on Tue Dec 14 14:46:41 2021
 """
 
 import numpy as np
-#import random NON SERVE A QUANTO PARE BASTA NP !?
-#import logging NON RIESCO A USARLO A QUANTO PARE !?
+import matplotlib.pyplot as plt
+import logging 
 
+import configparser
 
+logger = logging.getLogger(__name__)
 
-def initialize_state(N, M, choice = (False, 0.5), seed = 42):
-    """    DOCSTRING
-    Parole, mi sembra una cattiva idea fare una tupla per choice, mah!?
+def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42):
+    
+    """DOCSTRING?
+    a
     """
+    
     np.random.seed(seed)
     
-    #ERRORI SE N, M < 1 !?
+    if N < 1 or M < 1:
+       raise ValueError('Both lattice dimensions must be > 1, but are {0} and {1}'.format(N,M))
     
     size = (N, M)
     
-    if choice[0] == False:
+    if isinstance(choice, bool) == False:
+        raise TypeError('Expected a boolean to choose the spin up polarization percentage, but got {0}'.format(choice))
+    
+    elif choice == False:
+        if spin_up_pol != 0.5:
+         logger.warning('''Spin up polarization percentage was set to {0}, but the choice switch is False, so the standard value of 0.5 is being used'''.format(spin_up_pol))
+
         #Generate the spin lattice randomly
-        spin = [-1,1]
+        spin = [-1, 1]
         initial_state = np.random.choice(spin, size)
         
-    elif choice[0] == True:
-        #Generate initial lattice with input "polarity"(?)
-        initial_state = np.zeros(size)
+    elif choice == True:
+        if not 0 <= spin_up_pol <= 1:
+            raise ValueError('Expected the percentage of spin up polarization (expressed between 0 and 1), but got {0}'.format(spin_up_pol))
+        
+        if spin_up_pol == 0.5:
+         logger.warning('''The choice of setting the spin up polarization percentage was made, but its value has not been changed from the standard 0.5''')
+
+        #Generate initial lattice with input spin up percentage polarization
         initial_random = np.random.random(size)
-        initial_state[initial_random >= choice[1]] = -1
-        initial_state[initial_random < choice[1]] = 1
-        
-        #ERRORI SE choice1 non è tra 0 e 1!?
-        
-    else:
-        #GENERATE ERROR!?
-        pass
+        initial_state = np.zeros(size)
+        initial_state[initial_random >= spin_up_pol] = -1
+        initial_state[initial_random < spin_up_pol] = 1
     
     return initial_state
 
 
 def metropolis_move(lattice, beta):
-    """DOCSTRING
+    """DOCSTRING?
     ciao
     usare beta o T?
     """
@@ -80,7 +91,7 @@ def metropolis_move(lattice, beta):
 
 
 def calculate_energy(lattice):
-    """DOCSTRING
+    """DOCSTRING?
     ciao2
     """
     
@@ -104,7 +115,7 @@ def calculate_energy(lattice):
 
 
 def calculate_magnetization(lattice):
-    """DOCSTRING
+    """DOCSTRING?
     lel
     """
     
@@ -133,8 +144,12 @@ def simulate(lattice, beta, times):
     return states_evolution
 
 
-
-
+def evolution_plot():
+    """
+    DOCSTRING?
+    """
+    
+    figure = plt.figure(figsize=(30, 15), dpi=80)
 
 
 
