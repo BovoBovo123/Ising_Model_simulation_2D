@@ -11,13 +11,31 @@ import logging
 
 import configparser
 
-logger = logging.getLogger(__name__)
-
 def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42):
-    
-    """DOCSTRING?
-    a
     """
+
+    Parameters
+    ----------
+    N : TYPE
+        DESCRIPTION.
+    M : TYPE
+        DESCRIPTION.
+    choice : TYPE, optional
+        DESCRIPTION. The default is False.
+    spin_up_pol : TYPE, optional
+        DESCRIPTION. The default is 0.5.
+    seed : TYPE, optional
+        DESCRIPTION. The default is 42.
+
+    Returns
+    -------
+    None.
+
+    """
+    
+    logger = logging.getLogger(__name__)
+    level = logging.DEBUG
+    logging.basicConfig(level = level)
     
     np.random.seed(seed)
     
@@ -26,18 +44,18 @@ def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42):
     
     size = (N, M)
     
-    if isinstance(choice, bool) == False:
+    if isinstance(choice, bool) is False:
         raise TypeError('Expected a boolean to choose the spin up polarization percentage, but got {0}'.format(choice))
     
-    elif choice == False:
+    elif choice is False:
         if spin_up_pol != 0.5:
          logger.warning('''Spin up polarization percentage was set to {0}, but the choice switch is False, so the standard value of 0.5 is being used'''.format(spin_up_pol))
 
         #Generate the spin lattice randomly
-        spin = [-1, 1]
+        spin = [-1., 1.]
         initial_state = np.random.choice(spin, size)
         
-    elif choice == True:
+    elif choice is True:
         if not 0 <= spin_up_pol <= 1:
             raise ValueError('Expected the percentage of spin up polarization (expressed between 0 and 1), but got {0}'.format(spin_up_pol))
         
@@ -54,9 +72,19 @@ def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42):
 
 
 def metropolis_move(lattice, beta):
-    """DOCSTRING?
-    ciao
-    usare beta o T?
+    """
+
+    Parameters
+    ----------
+    lattice : TYPE
+        DESCRIPTION.
+    beta : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
     """
     
     #Length and width for looping
@@ -71,8 +99,7 @@ def metropolis_move(lattice, beta):
             site_spin = lattice[x, y]
             
             #Nearest neighbours total spin, considering PBC
-            neighbour_spin = lattice[(x+1)%length, y] + lattice[x, (y+1)%width] 
-            + lattice[(x-1)%length, y] + lattice[x, (y-1)%width]
+            neighbour_spin = lattice[(x+1)%length, y] + lattice[x, (y+1)%width] + lattice[(x-1)%length, y] + lattice[x, (y-1)%width]
             
             #Energy change due to flip
             energy_change = 2*site_spin*neighbour_spin
@@ -91,8 +118,17 @@ def metropolis_move(lattice, beta):
 
 
 def calculate_energy(lattice):
-    """DOCSTRING?
-    ciao2
+    """
+
+    Parameters
+    ----------
+    lattice : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
     """
     
     total_energy = 0.0
@@ -106,17 +142,25 @@ def calculate_energy(lattice):
     for x in range(length):
         for y in range(width):
             site_spin = lattice[x,y]
-            neighbour_spin = lattice[(x+1)%length, y] + lattice[x, (y+1)%width] 
-            + lattice[(x-1)%length, y] + lattice[x, (y-1)%width]
-            total_energy += - site_spin*neighbour_spin
+            neighbour_spin = lattice[(x+1)%length, y] + lattice[x, (y+1)%width] + lattice[(x-1)%length, y] + lattice[x, (y-1)%width]
+            total_energy += -site_spin*neighbour_spin
     
     #Single site energy, considering the presence of four neighbours
-    return total_energy/4
+    return total_energy/2
 
 
 def calculate_magnetization(lattice):
-    """DOCSTRING?
-    lel
+    """
+
+    Parameters
+    ----------
+    lattice : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
     """
     
     #Since spins are all +1 or -1
@@ -126,8 +170,21 @@ def calculate_magnetization(lattice):
 
 
 def simulate(lattice, beta, times):
-    """DOCSTRING
-    serve beta o T? o nulla?
+    """
+    
+    Parameters
+    ----------
+    lattice : TYPE
+        DESCRIPTION.
+    beta : TYPE
+        DESCRIPTION.
+    times : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
     """
     
     initial_state = lattice.copy()
