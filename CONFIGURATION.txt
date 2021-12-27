@@ -1,0 +1,49 @@
+#CONFIGURATION.txt file
+
+[SETTINGS]
+#Lattice dimensions
+N = 2
+M = 2
+
+#Choice of setting the percentage of spin ups; to do it must put choice = True (default is False) and change the default value from 0.5 (i.e. 50%)
+choice = False
+spin_up_pol = 0.5
+
+#Seed; default is 42
+seed = 42
+
+#Initial, final temperature and number of temperature points to be used; note that the transition should be around T = 2.5
+T_init = 1
+T_final = 3
+numb_T = 30
+
+#Equilibrium steps to be waited before starting acquisition of observables, and steps of the MC simulation to be done to calculate thermodinamical averages
+eq_steps = 500
+mc_steps = 100
+
+
+[PLOTTING]
+#Index of the temperature list at which energy and magnetization vs steps and lattice evolution are shown; must hold 0 <= n_show <= numb_T - 1; time instants to show lattice configuration; must be precisely 6 elements, default is (0, 5, 10, 50, 100, 1000)
+nT_show = 29
+t1 = 0
+t2 = 5
+t3 = 10
+t4 = 50
+t5 = 100
+t6 = 990
+
+[PATHS]
+#paths
+
+
+[LOGGING]
+#logging level from logging library, to set verbosity; choose from 0, 10, 20, 30, 40, 50 for notset, debug, info, warning, error, critical; know that INFO and WARNING are used
+level = 20
+
+
+
+
+
+
+
+
