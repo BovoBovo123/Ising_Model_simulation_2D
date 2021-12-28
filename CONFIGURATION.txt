@@ -2,8 +2,8 @@
 
 [SETTINGS]
 #Lattice dimensions
-N = 2
-M = 2
+N = 4
+M = 4
 
 #Choice of setting the percentage of spin ups; to do it must put choice = True (default is False) and change the default value from 0.5 (i.e. 50%)
 choice = False
@@ -15,7 +15,7 @@ seed = 42
 #Initial, final temperature and number of temperature points to be used; note that the transition should be around T = 2.5
 T_init = 1
 T_final = 3
-numb_T = 30
+numb_T = 10
 
 #Equilibrium steps to be waited before starting acquisition of observables, and steps of the MC simulation to be done to calculate thermodinamical averages
 eq_steps = 500
@@ -23,21 +23,33 @@ mc_steps = 100
 
 
 [PLOTTING]
-#Index of the temperature list at which energy and magnetization vs steps and lattice evolution are shown; must hold 0 <= n_show <= numb_T - 1; time instants to show lattice configuration; must be precisely 6 elements, default is (0, 5, 10, 50, 100, 1000)
-nT_show = 29
-t1 = 0
-t2 = 5
-t3 = 10
-t4 = 50
-t5 = 100
-t6 = 990
+#Index of the temperature list at which energy and magnetization vs steps and lattice evolution are shown; must hold 0 <= n_show <= numb_T - 1
+nT_show = 0
+
+#Time instants to show lattice configuration; must be precisely 5 elements, default is (5, 10, 50, 100, 1000), initial lattice (at t = 0) is always shown
+t1 = 5
+t2 = 10
+t3 = 50
+t4 = 100
+t5 = 1000
+
 
 [PATHS]
-#paths
+#Choice of saving or not data and plots; only plots are saved by default
+saving = True
+
+#Paths for saving energy and magnetization data and plots; default are in the same directory with fixed names
+ene_temp_path = ene_temp.txt
+mag_temp_path = mag_temp.txt
+ene_steps_path = ene_steps.txt
+mag_steps_path = mag_steps.txt
+temp_plots_path = temperature_plot.png
+steps_plots_path = steps_plot.png
+evo_plots_path = evolution_plot.png
 
 
 [LOGGING]
-#logging level from logging library, to set verbosity; choose from 0, 10, 20, 30, 40, 50 for notset, debug, info, warning, error, critical; know that INFO and WARNING are used
+#Logging level from logging library; choose from 0, 10, 20, 30, 40, 50 for notset, debug, info, warning, error, critical; know that INFO and WARNING are used; default is 20
 level = 20
 
 
