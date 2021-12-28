@@ -7,10 +7,9 @@ Created on Fri Dec 17 14:59:01 2021
 
 import functions_ising as fi
 import numpy as np
-
-import configparser
-
+#import configparser
 import pytest
+
 
 #Test the lattice initialization function
 def test_lattice_dimensions(N = 3, M = 2):
@@ -88,10 +87,17 @@ def test_read_configuration(filename = ''):
 def test_simulate_wrong_length():
     lattice = fi.initialize_state(N = 2, M = 3)
     beta = 1
-    times = [1, 2, 3, 4, 5]
+    times = [1, 2, 3, 4]
     with pytest.raises(ValueError):
         states_evolution = fi.simulate(lattice, beta, times)
 
+def test_simulate_correct_length():
+    lattice = fi.initialize_state(N = 2, M = 3)
+    beta = 1
+    times = [1, 2, 3, 4, 5]
+    six_states = fi.simulate(lattice, beta, times)
+    assert len(six_states) == 6
+    
 def test_simulate_negative_times():
     lattice = fi.initialize_state(N = 2, M = 3)
     beta = 1
