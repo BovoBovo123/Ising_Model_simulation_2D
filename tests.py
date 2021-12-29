@@ -5,9 +5,9 @@ Created on Fri Dec 17 14:59:01 2021
 @author: pietr
 """
 
+
 import functions_ising as fi
 import numpy as np
-#import configparser
 import pytest
 
 
@@ -44,12 +44,9 @@ def test_spin_up_polarization_not_a_percentage(N = 2, M = 3, choice = True, spin
     with pytest.raises(ValueError):
         lattice = fi.initialize_state(N, M, choice, spin_up_pol)   
 
-def test_invalid_logging_level(N = 2, M = 3):
-    with pytest.raises(ValueError):
-        lattice = fi.initialize_state(N, M, level = 'not a logging level')
-
 #Test the function that updates the lattice
 def test_metropolis_move(N = 2, M = 3, numb_T = 50, T_init = 1, T_final = 3):
+    #Test that dimensions, spins, energy and magnetization are as expected 
     lattice = fi.initialize_state(N, M)
     T = np.linspace(T_init, T_final, numb_T)
     for temp in range(numb_T):
@@ -64,6 +61,7 @@ def test_metropolis_move(N = 2, M = 3, numb_T = 50, T_init = 1, T_final = 3):
         for x in range(length):
             for y in range(width):
                 site_spin = lattice[x, y]
+                assert abs(site_spin) == 1
                 neighbour_spin = lattice[(x+1)%length, y] + lattice[x, (y+1)%width] + lattice[(x-1)%length, y] + lattice[x, (y-1)%width]
                 assert -4 <= neighbour_spin <= 4
                 energy_change = 2*site_spin*neighbour_spin
@@ -104,7 +102,26 @@ def test_simulate_negative_times():
     times = [1, 2, 3, -4, -5]
     with pytest.raises(ValueError):
         states_evolution = fi.simulate(lattice, beta, times)
-
+        
+def test_simulate(N = 2, M = 3, beta = 1):
+    #Test that dimensions, spins, energy and magnetization are as expected 
+    lattice = fi.initialize_state(N, M)
+    evolved_states = fi.simulate(lattice, beta)
+    for state in evolved_states:
+        abs_spin = np.abs(state)
+        assert abs_spin.all() == 1 
+        length = len(state)
+        width = len(state[0])
+        assert length == N
+        assert width == M
+        for x in range(length):
+            for y in range(width):
+               site_spin = lattice[x, y]
+               assert abs(site_spin) == 1
+               neighbour_spin = lattice[(x+1)%length, y] + lattice[x, (y+1)%width] + lattice[(x-1)%length, y] + lattice[x, (y-1)%width]
+               assert -4 <= neighbour_spin <= 4
+               energy_change = 2*site_spin*neighbour_spin
+               assert -8 <= energy_change <= 8
 
 
 
