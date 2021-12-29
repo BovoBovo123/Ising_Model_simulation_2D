@@ -4,16 +4,17 @@ Created on Tue Dec 14 14:55:28 2021
 
 @author: pietr
 """
+
+
 import functions_ising as fi
+import plots_ising as pi
 import numpy as np
-#import matplotlib.pyplot as plt
-#import configparser
-#from tqdm import tqdm
 from tqdm import trange
 import logging
 
+
 #Import configuration
-filename = 'CONFIGURATION.txt'
+filename = 'CONFIGURATION.ini'
 configuration = fi.read_configuration(filename)
 
 N = configuration.getint('SETTINGS', 'N')
@@ -46,7 +47,8 @@ ene_temp_path = configuration.get('PATHS', 'ene_temp_path')
 mag_temp_path = configuration.get('PATHS', 'mag_temp_path')
 ene_steps_path = configuration.get('PATHS', 'ene_steps_path')
 mag_steps_path = configuration.get('PATHS', 'mag_steps_path')
-saving = configuration.getboolean('PATHS', 'saving')
+save_data = configuration.getboolean('PATHS', 'save_data')
+save_plots = configuration.getboolean('PATHS', 'save_plots')
 
 temp_plots_path = configuration.get('PATHS', 'temp_plots_path')
 steps_plots_path = configuration.get('PATHS', 'steps_plots_path')
@@ -64,13 +66,12 @@ beta_show = 1.0/T_show
 x_step = range(eq_steps + mc_steps)
 y_ene = []
 y_mag = []
-    
-#Saving variables for logging in save functions; can be ignored by setting the logging level
-first_save1 = [True]
-first_save2 = [True]
+
+#Logging
+logging.basicConfig(level = level)
 
 for n_temp in trange(numb_T, desc = 'Loop over temperature values', position = 0):
-    config = fi.initialize_state(N, M, choice, spin_up_pol, seed, level)        
+    config = fi.initialize_state(N, M, choice, spin_up_pol, seed)        
     
     ene_count = mag_count = 0.0
     
@@ -89,8 +90,8 @@ for n_temp in trange(numb_T, desc = 'Loop over temperature values', position = 0
             y_mag.append(b)
             
             #Save data
-            if saving == True:
-                fi.save_steps_data(a, b, first_save1, ene_steps_path, mag_steps_path, level)
+            if save_data == True:
+                fi.save_steps_data(a, b, ene_steps_path, mag_steps_path)
 
     #Acquire energy and magnetization measurements
     for i in range(mc_steps):
@@ -106,8 +107,8 @@ for n_temp in trange(numb_T, desc = 'Loop over temperature values', position = 0
             y_mag.append(d)
             
             #Save data
-            if saving == True:
-                fi.save_steps_data(c, d, first_save1, ene_steps_path, mag_steps_path, level)
+            if save_data == True:
+                fi.save_steps_data(c, d, ene_steps_path, mag_steps_path)
 
         ene_count += ene_step
         mag_count += mag_step
@@ -117,15 +118,15 @@ for n_temp in trange(numb_T, desc = 'Loop over temperature values', position = 0
     magnetization[n_temp] = norm_intensive*mag_count
     
     #Save data
-    if saving == True:
-        fi.save_temp_data(energy[n_temp], magnetization[n_temp], first_save2, ene_temp_path, mag_temp_path, level)
+    if save_data == True:
+        fi.save_temp_data(energy[n_temp], magnetization[n_temp], ene_temp_path, mag_temp_path)
 
 #Plotting quantities and saving them
-fi.plots_T(T, energy, magnetization, saving, temp_plots_path)
-fi.plots_steps(x_step, y_ene, y_mag, nT_show, numb_T, saving, steps_plots_path)
+pi.plots_T(T, energy, magnetization, save_plots, temp_plots_path)
+pi.plots_steps(x_step, y_ene, y_mag, nT_show, numb_T, save_plots, steps_plots_path)
 
 #Showing lattice evolution and saving it
-initial_state = fi.initialize_state(N, M, choice, spin_up_pol, seed, level)  
-evolution_states = fi.simulate(initial_state, beta_show, times, level)
-fi.plot_evolution(evolution_states, N, M, times, level, saving, evo_plots_path)
+initial_state = fi.initialize_state(N, M, choice, spin_up_pol, seed)  
+evolution_states = fi.simulate(initial_state, beta_show, times)
+pi.plot_evolution(evolution_states, N, M, times, save_plots, evo_plots_path)
 
