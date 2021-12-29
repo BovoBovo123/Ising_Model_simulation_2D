@@ -5,13 +5,13 @@ Created on Tue Dec 14 14:46:41 2021
 @author: pietr
 """
 
+
 import numpy as np
-import matplotlib.pyplot as plt
 import logging 
 import configparser
 
 
-def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42, level = 20):
+def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42):
     """
 
     Parameters
@@ -35,12 +35,6 @@ def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42, level =
 
     """
     
-    if level not in [0, 10, 20, 30, 40, 50]:
-        raise ValueError('Logging level is expected to be 0, 10, 20, 30, 40 or 50 but is {0}\n'.format(level))
-    
-    logger = logging.getLogger(__name__)
-    logging.basicConfig(level = level)
-    
     np.random.seed(seed)
     
     if N < 1 or M < 1:
@@ -53,7 +47,7 @@ def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42, level =
     
     elif choice is False:
         if spin_up_pol != 0.5:
-         logger.warning('Spin up polarization percentage was set to {0}, but the choice switch is False, so the default value of 0.5 is being used\n'.format(spin_up_pol))
+            logging.warning('Spin up polarization percentage was set to {0}, but the choice switch is False, so the default value of 0.5 is being used\n'.format(spin_up_pol))
 
         #Generate the spin lattice randomly
         spin = [-1., 1.]
@@ -64,7 +58,7 @@ def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42, level =
             raise ValueError('Expected the percentage of spin up polarization (expressed between 0 and 1), but got {0}\n'.format(spin_up_pol))
         
         if spin_up_pol == 0.5:
-         logger.info('The choice of setting the spin up polarization percentage was made, but its value has not been changed from the default 0.5\n')
+         logging.info('The choice of setting the spin up polarization percentage was made, but its value has not been changed from the default 0.5\n')
 
         #Generate initial lattice with input spin up percentage polarization
         initial_random = np.random.random(size)
@@ -190,176 +184,43 @@ def read_configuration(filename):
     return configuration
 
 
-def save_steps_data(ene, mag, first_save, ene_path = 'ene_steps.txt', mag_path = 'mag_steps.txt', level = 20):
+def save_steps_data(ene, mag, ene_path = 'ene_steps.txt', mag_path = 'mag_steps.txt'):
     #For energy
-    if first_save[0] == False:
-        try:
-            with open(ene_path, 'a') as f:
-                write_data = f.write('{0}\n'.format(ene))
-        except PermissionError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-            raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-
-    #First time write start of file and check if it already exists
-    elif first_save[0] == True:
-        try:
-            with open(ene_path, 'x') as f:
-                f.write('#Saving energy vs steps\n')
-        except FileExistsError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.info('Save file for energy vs steps already exists; data will be appendend but do not make confusion with precedent one\n')
-        except PermissionError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-            raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-            
-    else:
-        raise TypeError('Expected True or False to check for the first call, but got {0}\n'.format(first_save[0]))
+    try:
+        with open(ene_path, 'a') as f:
+            write_data = f.write('{0}\n'.format(ene))
+    except PermissionError:
+        logging.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+        raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
 
     #For magnetization
-    if first_save[0] == False:
-        try:
-            with open(mag_path, 'a') as f:
-                write_data = f.write('{0}\n'.format(mag))
-        except PermissionError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-            raise
+    try:
+        with open(mag_path, 'a') as f:
+            write_data = f.write('{0}\n'.format(mag))
+    except PermissionError:
+        logging.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+        raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+ 
 
-    #First time write start of file and check if it already exists
-    elif first_save[0] == True:
-        try:
-            with open(mag_path, 'x') as f:
-                f.write('#Saving magnetization vs steps\n')
-        except FileExistsError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.info('Save file for magnetization vs steps already exists; data will be appendend but do not make confusion with precedent one\n')
-        except PermissionError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-            raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-            
-    else:
-        raise TypeError('Expected True or False to check for the first call, but got {0}\n'.format(first_save[0]))
-    
-    first_save[0] = False
-
-
-def save_temp_data(ene, mag, first_save, ene_path = 'ene_temp.txt', mag_path = 'mag_temp.txt', level = 20):
+def save_temp_data(ene, mag, ene_path = 'ene_temp.txt', mag_path = 'mag_temp.txt'):
     #For energy
-    if first_save[0] == False:
-        try:
-            with open(ene_path, 'a') as f:
-                write_data = f.write('{0}\n'.format(ene))
-        except PermissionError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-            raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-
-    #First time write start of file and check if it already exists
-    elif first_save[0] == True:
-        try:
-            with open(ene_path, 'x') as f:
-                f.write('#Saving energy vs temperature\n')
-        except FileExistsError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.info('Save file for energy vs temperature already exists; data will be appendend but do not make confusion with precedent one\n')
-        except PermissionError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-            raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-    
-    else:
-        raise TypeError('Expected True or False to check for the first call, but got {0}\n'.format(first_save[0]))
+    try:
+        with open(ene_path, 'a') as f:
+            write_data = f.write('{0}\n'.format(ene))
+    except PermissionError:
+        logging.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+        raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
 
     #For magnetization
-    if first_save[0] == False:
-        try: 
-            with open(mag_path, 'a') as f:
-                write_data = f.write('{0}\n'.format(mag))
-        except PermissionError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-            raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-
-    #First time write start of file and check if it already exists
-    elif first_save[0] == True:
-        try:
-            with open(mag_path, 'x') as f:
-                f.write('#Saving magnetization vs temperature\n')
-        except FileExistsError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.info('Save file for magnetization vs temperature already exists; data will be appendend but do not make confusion with precedent one\n')
-        except PermissionError:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-            raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path, and ignore the logging\n')
-
-    else:
-        raise TypeError('Expected True or False to check for the first call, but got {0}\n'.format(first_save[0]))
-    
-    first_save[0] = False
-
-
-def plots_T(T, energy, magnetization, saving = True, path = 'temperature_plot.png'):
-    #Size set to fill well
-    f = plt.figure(figsize=(24, 10));  
-
-    #Energy plot vs T
-    sub_f =  f.add_subplot(1, 2, 1);
-    plt.scatter(T, energy, s = 50, marker = 'o', color = 'IndianRed')
-    plt.xlabel("Temperature", fontsize  =22)
-    plt.ylabel("Energy", fontsize = 22)         
-    
-    #Magnetization plot vs T
-    sub_f =  f.add_subplot(1, 2, 2);
-    plt.scatter(T, abs(magnetization), s = 50, marker = 'o', color = 'RoyalBlue')
-    plt.xlabel("Temperature ", fontsize = 22)
-    plt.ylabel("Magnetization ", fontsize = 22)   
-    
-    #Saving
-    if saving == True:
-        f.savefig(path)
-    
-    
-def plots_steps(x_step, y_ene, y_mag, n_show, numb_T, saving = True, path = 'steps_plot.png'):
-    if not 0 <= n_show <= numb_T - 1:
-        raise ValueError('Must choose the index of the temperature to plot quantities vs steps between 0 and the number of temperature points - 1 (both included); got 0 <= {0} <= {1}\n'.format(n_show, numb_T))                     
-    
-    #Size set to fill well
-    f = plt.figure(figsize=(24, 10));  
-
-    #Energy plot vs steps
-    sub_f =  f.add_subplot(1, 2, 1);
-    plt.scatter(x_step, y_ene, s = 20, marker = 'o', color = 'IndianRed')
-    plt.xlabel("Steps", fontsize=22)
-    plt.ylabel("Energy ", fontsize=22)       
-
-    #Magnetization plot vs steps
-    sub_f =  f.add_subplot(1, 2, 2);
-    plt.scatter(x_step, y_mag, s = 20, marker = 'o', color = 'RoyalBlue')
-    plt.xlabel("Steps", fontsize=22)
-    plt.ylabel("Magnetization ", fontsize=22) 
-    
-    #Saving
-    if saving == True:
-        f.savefig(path)
+    try: 
+        with open(mag_path, 'a') as f:
+            write_data = f.write('{0}\n'.format(mag))
+    except PermissionError:
+        logging.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+        raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
       
 
-def simulate(lattice, beta, times = (5, 10, 50, 100, 1000), level = 20):
+def simulate(lattice, beta, times = (5, 10, 50, 100, 1000)):
     """
     
     Parameters
@@ -383,9 +244,7 @@ def simulate(lattice, beta, times = (5, 10, 50, 100, 1000), level = 20):
         if time < 0:
             raise ValueError('Must insert non-negative values of times at which the lattice is shown\n')
         if time == 0:
-            logger = logging.getLogger(__name__)
-            logging.basicConfig(level = level)
-            logger.info('THe initial lattice i.e. at time = 0 il always shown, so there will be a repetition in the evolution plot\n')
+            logging.info('The initial lattice i.e. at time = 0 will always be shown, so there will be a repetition in the evolution plot\n')
 
     initial_state = lattice.copy()
     evolution_steps = max(times)+ 1
@@ -401,33 +260,6 @@ def simulate(lattice, beta, times = (5, 10, 50, 100, 1000), level = 20):
     return states_evolution
 
 
-def plot_evolution(evolution_states, N, M, times = (5, 10, 50, 100, 1000), level = 20, saving = True, path = 'evolution_plot.png'):
-    f = plt.figure(figsize=(30, 18), dpi=80)
-    
-    #Create a meshgrid; special case for N = M = 1
-    if N*M == 1:
-        x, y = np.meshgrid(range(2), range(2))
-        logger = logging.getLogger(__name__)
-        logging.basicConfig(level = level)
-        logger.info('Time evolution cannot be displayed correctly for a single point lattice (i.e. M = N = 1)\n')
-    else:
-        x, y = np.meshgrid(range(N), range(M))
-    
-    #Add subplots at the different times
-    for t in range(len(times)+1):
-        sub_f = f.add_subplot(2, 3, t+1)
-        plt.pcolormesh(x, y, evolution_states[t], cmap = plt.cm.RdBu, shading = 'nearest')
-        plt.axis('off')
-        
-        if t != 0:
-            plt.title('Time = 0', fontsize = 28)
-            
-        else:
-            plt.title('Time = {0}'.format(times[t-1]), fontsize = 28)
-
-    #Saving
-    if saving == True:
-        f.savefig(path)
 
 
 
