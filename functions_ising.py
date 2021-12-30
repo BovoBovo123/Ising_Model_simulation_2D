@@ -332,8 +332,8 @@ def simulate(lattice, beta, times = (5, 10, 50, 100, 1000)):
         raise ValueError('Must insert time instants that are all different, but got only {0} that are unique'.format(time_set))
     
     sorted_times = sorted(times)
-    if times != sorted_times:
-        logging.info('Time instants are not sorted, so the plot might look strange and/or unclear')
+    if not np.array_equal(times, sorted_times):
+        logging.info('Time instants are not sorted, so the future evolution plot might look strange and/or unclear')
     
     initial_state = lattice.copy()
     evolution_steps = max(times)+ 1
