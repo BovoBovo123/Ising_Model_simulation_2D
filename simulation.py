@@ -123,7 +123,7 @@ for n_temp in trange(numb_T, desc = 'Loop over temperature values', position = 0
 
 #Plotting quantities and saving them
 pi.plots_T(T, energy, magnetization, save_plots, temp_plots_path)
-pi.plots_steps(x_step, y_ene, y_mag, nT_show, numb_T, save_plots, steps_plots_path)
+pi.plots_steps(x_step, y_ene, y_mag, save_plots, steps_plots_path)
 
 #Showing lattice evolution and saving it
 initial_state = fi.initialize_state(N, M, choice, spin_up_pol, seed)  
