@@ -13,26 +13,32 @@ import configparser
 
 def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42):
     """
-
+    This function generate the spin lattice randomly, with a certain mean spin 
+    polarization if given
+    
     Parameters
     ----------
-    N : TYPE
-        DESCRIPTION.
-    M : TYPE
-        DESCRIPTION.
-    choice : TYPE, optional
-        DESCRIPTION. The default is False.
-    spin_up_pol : TYPE, optional
-        DESCRIPTION. The default is 0.5.
-    seed : TYPE, optional
-        DESCRIPTION. The default is 42.
-    level : TYPE, optional
-        DESCRIPTION. The default is 20.
+    N : int
+        length of the lattice.
+    M : int
+        width of the lattice.
+    choice : bool, optional
+        if True, the function accepts mean spin up polarization. The default is False.
+    spin_up_pol : float, optional
+        mean spin up polarization. The default is 0.5.
+    seed : int, optional
+        sets the seed using np.random.seed(). The default is 42.
 
     Returns
     -------
-    None.
-
+        the N*M spin lattice initial configuration.
+    
+    Raises
+    ------
+        ValueError if lattice dimensions are less than 1, or if the mean 
+            spin polarization is not between 0 and 1 (included).
+        TYpeError if the choice switch is not a boolean.
+        
     """
     
     np.random.seed(seed)
@@ -71,17 +77,19 @@ def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42):
 
 def metropolis_move(lattice, beta):
     """
+    This functions uses the Metropolis algorithm to update the lattice spins
 
     Parameters
     ----------
-    lattice : TYPE
-        DESCRIPTION.
-    beta : TYPE
-        DESCRIPTION.
+    lattice : 2D-like array
+        lattice spin configuration.
+    beta : float
+        1/kT where T is the temperature and the Boltzmann constant k 
+        is taken equal to 1.
 
     Returns
     -------
-    None.
+        the updated lattice spin configuration.
 
     """
     
@@ -116,15 +124,17 @@ def metropolis_move(lattice, beta):
 
 def calculate_energy(lattice):
     """
+    This functions calculates the lattice energy (with PBC) using the Ising 
+    Hamiltonian with the exchange constant J equal to 1
 
     Parameters
     ----------
-    lattice : TYPE
-        DESCRIPTION.
+    lattice : 2D-like array
+        lattice spin configuration.
 
     Returns
     -------
-    None.
+        the lattice energy, considering periodic boundary conditions.
 
     """
     
@@ -147,15 +157,16 @@ def calculate_energy(lattice):
 
 def calculate_magnetization(lattice):
     """
+    This functions calculates the lattice magnetization
 
     Parameters
     ----------
-    lattice : TYPE
-        DESCRIPTION.
+    lattice : 2D-like array
+        lattice spin configuration.
 
     Returns
     -------
-    None.
+        the lattice magnetization.
 
     """
     
@@ -167,10 +178,20 @@ def calculate_magnetization(lattice):
 
 def read_configuration(filename):
     """
+    This function reads a configuration file
+
+    Parameters
+    ----------
+    filename : string
+        path of the configuration file to be read.
 
     Returns
     -------
-    None.
+        a configparser that reads the configuration file.
+    
+    Raises
+    ------
+        FileNotFoundError if the file that is read has no sections
 
     """
     
@@ -185,6 +206,31 @@ def read_configuration(filename):
 
 
 def save_steps_data(ene, mag, ene_path = 'ene_steps.txt', mag_path = 'mag_steps.txt'):
+    """
+    This functions saves energy and magnetization points vs step number in files 
+    with given path; to be called in a loop while calculating those quantities
+
+    Parameters
+    ----------
+    ene : float
+        energy value at a certain step number.
+    mag : float
+        magnetization value at a certain step number.
+    ene_path : string, optional
+        path for the energy save file. The default is 'ene_steps.txt'.
+    mag_path : string, optional
+        path for the magnetization save file. The default is 'mag_steps.txt'.
+
+    Returns
+    -------
+        None.
+    
+    Raises
+    ------
+        PermissionError if the files cannot be created due to lack of permission
+
+    """
+    
     #For energy
     try:
         with open(ene_path, 'a') as f:
@@ -203,6 +249,31 @@ def save_steps_data(ene, mag, ene_path = 'ene_steps.txt', mag_path = 'mag_steps.
  
 
 def save_temp_data(ene, mag, ene_path = 'ene_temp.txt', mag_path = 'mag_temp.txt'):
+    """
+    This functions saves energy and magnetization points vs temperature in files 
+    with given path; to be called in a loop while calculating those quantities
+
+    Parameters
+    ----------
+    ene : float
+        energy value at a certain temperature.
+    mag : float
+        magnetization value at a certain temperature.
+    ene_path : string, optional
+        path for the energy save file. The default is 'ene_temp.txt'.
+    mag_path : string, optional
+        path for the magnetization save file. The default is 'mag_temp.txt'.
+
+    Returns
+    -------
+        None.
+    
+    Raises
+    ------
+        PermissionError if the files cannot be created due to lack of permission
+
+    """
+    
     #For energy
     try:
         with open(ene_path, 'a') as f:
@@ -222,21 +293,31 @@ def save_temp_data(ene, mag, ene_path = 'ene_temp.txt', mag_path = 'mag_temp.txt
 
 def simulate(lattice, beta, times = (5, 10, 50, 100, 1000)):
     """
-    
+    This function simulates the lattice evolution for a given 
+    number of steps (i.e. time)
+
     Parameters
     ----------
-    lattice : TYPE
-        DESCRIPTION.
-    beta : TYPE
-        DESCRIPTION.
-    times : TYPE
-        DESCRIPTION.
+    lattice : 2D-like array
+        lattice spin configuration to be studied.
+    beta : float
+        1/kT where T is the temperature and the Boltzmann constant k 
+        is taken equal to 1.
+    times : 1D-like array, optional
+        five time instants when to store the evolved lattice spin configuration. 
+        The default is (5, 10, 50, 100, 1000).
 
     Returns
     -------
-    None.
+        array containing the initial lattice spin configuration and the evolved ones.
+    
+    Raises
+    ------
+        ValueError if the number of time instants if different than five, or if
+        any time instant is negative, or if time instants are repeated
 
     """
+    
     if len(times) != 5:
         raise ValueError('Must insert 5 value of times at which the lattice is shown; {0} were passed\n'.format(len(times)))
     
@@ -245,7 +326,15 @@ def simulate(lattice, beta, times = (5, 10, 50, 100, 1000)):
             raise ValueError('Must insert non-negative values of times at which the lattice is shown\n')
         if time == 0:
             logging.info('The initial lattice i.e. at time = 0 will always be shown, so there will be a repetition in the evolution plot\n')
-
+    
+    time_set = set(times)
+    if len(times) != len(time_set):
+        raise ValueError('Must insert time instants that are all different, but got only {0} that are unique'.format(time_set))
+    
+    sorted_times = sorted(times)
+    if times != sorted_times:
+        logging.info('Time instants are not sorted, so the plot might look strange and/or unclear')
+    
     initial_state = lattice.copy()
     evolution_steps = max(times)+ 1
     states_evolution = [initial_state]
