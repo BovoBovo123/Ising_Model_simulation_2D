@@ -84,25 +84,32 @@ def test_read_configuration(filename = ''):
 #Test the function that simulates lattice evolution
 def test_simulate_wrong_length():
     lattice = fi.initialize_state(N = 2, M = 3)
-    beta = 1
+    beta = 1.0
     times = [1, 2, 3, 4]
     with pytest.raises(ValueError):
         states_evolution = fi.simulate(lattice, beta, times)
 
 def test_simulate_correct_length():
     lattice = fi.initialize_state(N = 2, M = 3)
-    beta = 1
+    beta = 1.0
     times = [1, 2, 3, 4, 5]
     six_states = fi.simulate(lattice, beta, times)
     assert len(six_states) == 6
     
 def test_simulate_negative_times():
     lattice = fi.initialize_state(N = 2, M = 3)
-    beta = 1
+    beta = 1.0
     times = [1, 2, 3, -4, -5]
     with pytest.raises(ValueError):
         states_evolution = fi.simulate(lattice, beta, times)
-        
+
+def test_simulate_no_time_repetitions():
+    lattice = fi.initialize_state(N = 2, M = 3)
+    beta = 1.0
+    times = [1, 2, 3, 3, 4]
+    with pytest.raises(ValueError):
+        states_evolution = fi.simulate(lattice, beta, times)
+
 def test_simulate(N = 2, M = 3, beta = 1):
     #Test that dimensions, spins, energy and magnetization are as expected 
     lattice = fi.initialize_state(N, M)
