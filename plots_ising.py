@@ -177,14 +177,16 @@ def plot_evolution(evolution_states, N, M, times = (5, 10, 50, 100, 1000), savin
     #Create a meshgrid; special case for N = M = 1
     if N*M == 1:
         x, y = np.meshgrid(range(2), range(2))
-        logging.info('Time evolution cannot be displayed correctly for a single point lattice (i.e. M = N = 1)\n')
+        logging.warning('Time evolution cannot be displayed correctly for a single point lattice (i.e. M = N = 1)\n')
+        shading = 'flat'
     else:
         x, y = np.meshgrid(range(N), range(M))
+        shading = 'nearest'
     
     #Add subplots at the different times
     for t in range(len(times)+1):
         sub_f = f.add_subplot(2, 3, t+1)
-        plt.pcolormesh(x, y, evolution_states[t], cmap = plt.cm.RdBu, shading = 'nearest')
+        plt.pcolormesh(x, y, evolution_states[t], shading = '{0}'.format(shading), cmap = plt.cm.RdBu)
         plt.axis('off')
         
         if t != 0:
