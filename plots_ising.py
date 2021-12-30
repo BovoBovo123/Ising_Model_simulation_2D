@@ -78,7 +78,7 @@ def plots_T(T, energy, magnetization, saving = True, save_path = 'temperature_pl
         f.savefig(save_path)
     
     
-def plots_steps(x_step, y_ene, y_mag, n_show, numb_T, saving = True, save_path = 'steps_plot.png', load = False, load_path = ('ene_steps_path', 'mag_steps_path')):
+def plots_steps(x_step, y_ene, y_mag, saving = True, save_path = 'steps_plot.png', load = False, load_path = ('ene_steps_path', 'mag_steps_path')):
     """
     This function plots energy and magnetization vs temperature, with data that is
     either given or loaded, and can save it 
@@ -91,10 +91,6 @@ def plots_steps(x_step, y_ene, y_mag, n_show, numb_T, saving = True, save_path =
         energy points.
     y_mag : 1D-like array
         magnetization points.
-    n_show : int
-        index of temperature for which plots are shown.
-    numb_T : int
-        number of temperature points simulated.
     saving : bool, optional
         if True, the plot is saved. The default is True.
     save_path : string, optional
@@ -128,10 +124,6 @@ def plots_steps(x_step, y_ene, y_mag, n_show, numb_T, saving = True, save_path =
     
     else:
         raise TypeError('Was expecting a boolean to decide if to load the data, but got {0}'.format(load))
-
-    #Correct choice of temperature to show plots    
-    if not 0 <= n_show <= numb_T - 1:
-        raise ValueError('Must choose the index of the temperature to plot quantities vs steps between 0 and the number of temperature points - 1 (both included); got 0 <= {0} <= {1}\n'.format(n_show, numb_T))                     
     
     #Size set to fill well
     f = plt.figure(figsize=(24, 10));  
