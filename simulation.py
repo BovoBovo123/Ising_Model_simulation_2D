@@ -58,7 +58,8 @@ evo_plots_path = configuration.get('PATHS', 'evo_plots_path')
 norm_intensive = 1.0/(mc_steps*N*M)
 
 T = np.linspace(T_init, T_final, numb_T)
-energy, magnetization = np.zeros(numb_T), np.zeros(numb_T)
+energy = np.zeros(numb_T)
+magnetization =  np.zeros(numb_T)
 
 T_show = T[nT_show]
 beta_show = 1.0/T_show
@@ -70,17 +71,22 @@ y_mag = []
 #Logging
 logging.basicConfig(level = level)
 
+#Initial state
+initial_state = fi.initialize_state(N, M, choice, spin_up_pol, seed)  
+
+
 for n_temp in trange(numb_T, desc = 'Loop over temperature values', position = 0):
-    config = fi.initialize_state(N, M, choice, spin_up_pol, seed)        
+    config = initial_state.copy()     
     
-    ene_count = mag_count = 0.0
+    ene_count = 0.0
+    mag_count = 0.0
     
     #Beta values, with Boltzmann constant k = 1
     beta = 1.0/T[n_temp]
     
     #Equilibrate the system
     for i in range(eq_steps):         
-        fi.metropolis_move(config, beta)  
+        config = fi.metropolis_move(config, beta)  
         
         #Data for plots vs steps
         if n_temp == nT_show:
@@ -95,7 +101,7 @@ for n_temp in trange(numb_T, desc = 'Loop over temperature values', position = 0
 
     #Acquire energy and magnetization measurements
     for i in range(mc_steps):
-        fi.metropolis_move(config, beta)          
+        config = fi.metropolis_move(config, beta)          
         ene_step = fi.calculate_energy(config)     
         mag_step = fi.calculate_magnetization(config) 
         
@@ -126,7 +132,6 @@ pi.plots_T(T, energy, magnetization, save_plots, temp_plots_path)
 pi.plots_steps(x_step, y_ene, y_mag, save_plots, steps_plots_path)
 
 #Showing lattice evolution and saving it
-initial_state = fi.initialize_state(N, M, choice, spin_up_pol, seed)  
 evolution_states = fi.simulate(initial_state, beta_show, times)
 pi.plot_evolution(evolution_states, N, M, times, save_plots, evo_plots_path)
 
