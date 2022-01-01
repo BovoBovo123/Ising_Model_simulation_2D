@@ -72,7 +72,7 @@ Here lattice parameters can be changed to change the system conditions for the s
             
 ### tests
             
-Here that the functions must have are tested; all tests are passed.
+Here properties that the functions must have are tested; all tests are passed.
             
 ## Example of execution and results
             
