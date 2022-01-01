@@ -76,12 +76,31 @@ Here properties that the functions must have are tested; all tests are passed.
             
 ## Example of execution and results
             
-The current configuration and simulation files are used to study a: LATTICE
+The current configuration and simulation files are used to study a 30 x 30 lattice, with spins randomly chosen, in 200 temperature points between 1 and 4; for each one, the lattice is updated 1000 times in order to go towards equilibrium, and then energy and magnetization are averaged over 1000 more steps. 
+After a simulation time of about one hour, these are the resulting plots: 
+
+![temperature_plot](https://user-images.githubusercontent.com/79457897/147859840-90a854ce-d55f-4612-9bdf-c5a397027e3b.png)
+
+![steps_plot](https://user-images.githubusercontent.com/79457897/147859881-54921445-b503-475b-82bf-2c29fa8a61d5.png)
+
+![evolution_plot](https://user-images.githubusercontent.com/79457897/147859884-433225d7-beec-4d92-bb14-d4a6cdcc8095.png)
+
+It can be seen that:
+
+- energy at low temperature shows that the system is in a more stable configuration than at high T;
+- similarly, magnetization shows a phase transition between an ordered low-temperature state and a disordered high-temperature one with zero mean magnetization;
+- the system goes to equilibrium for energy and magnetization vs number of steps; this plot can be used to optimize the number of steps in the simulation;
+- from a random configuration, spin domain form; the times at which the lattice is shown may be varied to study the complete evolution.
+
+The last two plots are for low temperature, more precisely for T = 1.
+If the simulation were done changing only the parameter n_show from 0 to 199, the last two plots would be for T = 4:
+
+![steps_plot](https://user-images.githubusercontent.com/79457897/147860011-92dd8731-33e8-487b-a9bf-633823616ad2.png)
+
+![evolution_plot](https://user-images.githubusercontent.com/79457897/147860015-bb7b9062-6678-467b-a78f-dd469bed1fb8.png)
+
+It can be seen now that the higher thermal energy makes energy and magnetization have big fluctuations around the mean values from their the plot vs temperature.
             
-After a TIME these are the resulting plots: PLOTS
+Note that intensive energy and magnetization are plotted vs temperature, while total ones are plotted vs number of steps; however, it can be seen that the values are compatible since at each step number the intensive one is the total one divided by the number of sites.
 
-It can be seen THAT:
 
-CHANGE NSHOW TO HIGH T AND SHOW:
-
-SEE
