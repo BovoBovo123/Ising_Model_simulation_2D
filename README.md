@@ -44,7 +44,7 @@ The following libraries are used in the code:
 - numpy 1.21.2
 - matplotlib 3.4.3
 - for an informative progress bar: tqdm 4.62.3
-- logging and configparser from python 3.9.7
+- logging, configparser and sys from python 3.9.7
 - for testing: pytest 6.2.5
             
 ## Modules
