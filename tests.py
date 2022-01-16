@@ -65,27 +65,6 @@ def test_metropolis_move(N = 2, M = 3, numb_T = 50, T_init = 1, T_final = 3):
 def test_read_configuration(filename = ''):
     with pytest.raises(FileNotFoundError):
         config = fi.read_configuration(filename)
-        
-#Test the function that simulates lattice evolution
-def test_simulate_wrong_length(N = 2, M = 3, beta = 1.0, times = [1, 2, 3, 4]):
-    lattice = fi.initialize_state(N, M)
-    with pytest.raises(ValueError):
-        states_evolution = fi.simulate(lattice, beta, times)
-
-def test_simulate_correct_length(N = 2, M = 3, beta = 1.0, times = [1, 2, 3, 4, 5]):
-    lattice = fi.initialize_state(N, M)
-    six_states = fi.simulate(lattice, beta, times)
-    assert len(six_states) == 6
-    
-def test_simulate_negative_times(N = 2, M = 3, beta = 1.0, times = [1, 2, 3, -4, -5]):
-    lattice = fi.initialize_state(N, M)
-    with pytest.raises(ValueError):
-        states_evolution = fi.simulate(lattice, beta, times)
-
-def test_simulate_no_time_repetitions(N = 2, M = 3, beta = 1.0, times = [1, 2, 3, 3, 4]):
-    lattice = fi.initialize_state(N, M)
-    with pytest.raises(ValueError):
-        states_evolution = fi.simulate(lattice, beta, times)
 
 def test_simulate(N = 2, M = 3, beta = 1):
     #Test that dimensions, spins, energy and magnetization are as expected 
