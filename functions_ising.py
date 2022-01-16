@@ -11,7 +11,7 @@ import logging
 import configparser
 
 
-def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42):
+def initialize_state(N, M, spin_up_pol = None, seed = 42):
     """
     This function generate the spin lattice randomly, with a certain mean spin 
     polarization if given
@@ -22,8 +22,6 @@ def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42):
         length of the lattice.
     M : int
         width of the lattice.
-    choice : bool, optional
-        if True, the function accepts mean spin up polarization. The default is False.
     spin_up_pol : float, optional
         mean spin up polarization. The default is 0.5.
     seed : int, optional
@@ -35,8 +33,6 @@ def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42):
     
     Raises
     ------
-        ValueError if lattice dimensions are less than 1, or if the mean 
-            spin polarization is not between 0 and 1 (included).
         TYpeError if the choice switch is not a boolean.
         
     """
@@ -48,24 +44,15 @@ def initialize_state(N, M, choice = False, spin_up_pol = 0.5, seed = 42):
     
     size = (N, M)
     
-    if isinstance(choice, bool) is False:
-        raise TypeError('Expected a boolean to choose the spin up polarization percentage, but got {0}\n'.format(choice))
-    
-    elif choice is False:
-        if spin_up_pol != 0.5:
-            logging.warning('Spin up polarization percentage was set to {0}, but the choice switch is False, so the default value of 0.5 is being used\n'.format(spin_up_pol))
-
+    if spin_up_pol == None:
         #Generate the spin lattice randomly
         spin = [-1., 1.]
         initial_state = np.random.choice(spin, size)
         
-    elif choice is True:
+    else:
         if not 0 <= spin_up_pol <= 1:
-            raise ValueError('Expected the percentage of spin up polarization (expressed between 0 and 1), but got {0}\n'.format(spin_up_pol))
+            logging.warning('Expected the percentage of spin up polarization (expressed between 0 and 1), but got {0}; the lattice will be completely polarized\n'.format(spin_up_pol))
         
-        if spin_up_pol == 0.5:
-         logging.info('The choice of setting the spin up polarization percentage was made, but its value has not been changed from the default 0.5\n')
-
         #Generate initial lattice with input spin up percentage polarization
         initial_random = np.random.random(size)
         initial_state = np.zeros(size)
