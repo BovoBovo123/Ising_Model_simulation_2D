@@ -215,7 +215,7 @@ def save_steps_data(ene, mag, ene_path = 'ene_steps.txt', mag_path = 'mag_steps.
     
     Raises
     ------
-        PermissionError if the files cannot be created due to lack of permission
+        IOError if the files cannot be created.
 
     """
     
@@ -223,17 +223,17 @@ def save_steps_data(ene, mag, ene_path = 'ene_steps.txt', mag_path = 'mag_steps.
     try:
         with open(ene_path, 'a') as f:
             write_data = f.write('{0}\n'.format(ene))
-    except PermissionError:
-        logging.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
-        raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+    except IOError:
+        logging.error('It may be that you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+        raise IOError('It may be that you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
 
     #For magnetization
     try:
         with open(mag_path, 'a') as f:
             write_data = f.write('{0}\n'.format(mag))
-    except PermissionError:
-        logging.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
-        raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+    except IOError:
+        logging.error('It may be that you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+        raise IOError('It may be that you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
  
 
 def save_temp_data(ene, mag, ene_path = 'ene_temp.txt', mag_path = 'mag_temp.txt'):
@@ -258,7 +258,7 @@ def save_temp_data(ene, mag, ene_path = 'ene_temp.txt', mag_path = 'mag_temp.txt
     
     Raises
     ------
-        PermissionError if the files cannot be created due to lack of permission
+        IOError if the files cannot be created.
 
     """
     
@@ -266,17 +266,17 @@ def save_temp_data(ene, mag, ene_path = 'ene_temp.txt', mag_path = 'mag_temp.txt
     try:
         with open(ene_path, 'a') as f:
             write_data = f.write('{0}\n'.format(ene))
-    except PermissionError:
-        logging.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
-        raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+    except IOError:
+        logging.error('It may be that you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+        raise IOError('It may be that you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
 
     #For magnetization
     try: 
         with open(mag_path, 'a') as f:
             write_data = f.write('{0}\n'.format(mag))
-    except PermissionError:
-        logging.error('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
-        raise PermissionError('It appears you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+    except IOError:
+        logging.error('It may be that you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
+        raise IOError('It may be that you do not have the permission to create or open the file; if you want to save the data, try to create an empty file with the name of the save path\n')
       
 
 def simulate(lattice, beta, times = (5, 10, 50, 100, 1000)):
