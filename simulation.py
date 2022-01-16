@@ -11,10 +11,13 @@ import plots_ising as pi
 import numpy as np
 from tqdm import trange
 import logging
+import sys
 
 
-#Import configuration
+#Import configuration, default or read by command line
 filename = 'CONFIGURATION.ini'
+if len(sys.argv) > 1:
+    filename = sys.argv[1]
 configuration = fi.read_configuration(filename)
 
 N = configuration.getint('SETTINGS', 'N')
