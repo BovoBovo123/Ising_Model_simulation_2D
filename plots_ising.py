@@ -169,8 +169,31 @@ def plot_evolution(evolution_states, N, M, times = (5, 10, 50, 100, 1000), savin
     Returns
     -------
         None.
+        
+    Raises
+    ------
+        ValueError if the number of time insatnts is not 5, or 
+        if any of those in negative or repeated
 
     """
+    
+    if len(times) != 5:
+        raise ValueError('Must insert 5 value of times at which the lattice is shown; {0} were passed\n'.format(len(times)))
+    
+    for time in times:
+        if time < 0:
+            raise ValueError('Must insert non-negative values of times at which the lattice is shown\n')
+        if time == 0:
+            logging.info('The initial lattice i.e. at time = 0 will always be shown, so there will be a repetition in the evolution plot\n')
+    
+    time_set = set(times)
+    if len(times) != len(time_set):
+        raise ValueError('Must insert time instants that are all different, but got only {0} that are unique'.format(time_set))
+    
+    sorted_times = sorted(times)
+    if not np.array_equal(times, sorted_times):
+        logging.info('Time instants are not sorted, so the future evolution plot might look strange and/or unclear')
+
     
     f = plt.figure(figsize=(30, 18), dpi=80)
     
