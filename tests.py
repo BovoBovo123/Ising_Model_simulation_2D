@@ -17,32 +17,26 @@ def test_lattice_dimensions(N = 3, M = 2):
     assert len(lattice) == 3
     assert len(lattice[0]) == 2
     
-def test_lattice_dimensions_polarized(N = 3, M = 2, choice = True, spin_up_pol = 0.3):
-    lattice = fi.initialize_state(N, M)
-    assert len(lattice) == 3
-    assert len(lattice[0]) == 2
-    
 def test_spin_values(N = 3, M = 2):
     lattice = fi.initialize_state(N, M)
     abs_spin = np.abs(lattice)
     assert abs_spin.all() == 1
     
-def test_spin_values_polarized(N = 3, M = 2, choice = True, spin_up_pol = 0.3):
-    lattice = fi.initialize_state(N, M)
-    abs_spin = np.abs(lattice)
-    assert abs_spin.all() == 1
+def test_spins_all_up(N = 3, M = 2, spin_up_pol = 1):
+    lattice = fi.initialize_state(N, M, spin_up_pol)
+    for i in range(N):
+        for j in range(M):
+            assert lattice[i][j] == 1
+    
+def test_spins_all_down(N = 3, M = 2, spin_up_pol = 0):
+    lattice = fi.initialize_state(N, M, spin_up_pol)
+    for i in range(N):
+        for j in range(M):
+            assert lattice[i][j] == -1    
 
 def test_raises_error_lattice_dimensions(N = -1, M = -2):
     with pytest.raises(ValueError):
         lattice = fi.initialize_state(N, M)
-
-def test_choice_not_boolean(N = 2, M = 3, choice = 'not a boolean'):
-    with pytest.raises(TypeError):
-        lattice = fi.initialize_state(N, M, choice) 
-
-def test_spin_up_polarization_not_a_percentage(N = 2, M = 3, choice = True, spin_up_pol = 1.2):
-    with pytest.raises(ValueError):
-        lattice = fi.initialize_state(N, M, choice, spin_up_pol)   
 
 #Test the function that updates the lattice
 def test_metropolis_move(N = 2, M = 3, numb_T = 50, T_init = 1, T_final = 3):
@@ -67,46 +61,29 @@ def test_metropolis_move(N = 2, M = 3, numb_T = 50, T_init = 1, T_final = 3):
                 energy_change = 2*site_spin*neighbour_spin
                 assert -8 <= energy_change <= 8
 
-#Test functions for energy and magnetization calculation
-def test_correct_total_energy(N = 2, M = 3, choice = True, spin_up_pol = 1):
-    lattice = fi.initialize_state(N, M, choice, spin_up_pol)
-    assert fi.calculate_energy(lattice) == -N*M*4/2  
-    
-def test_correct_total_magnetization(N = 2, M = 3, choice = True, spin_up_pol = 1):
-    lattice = fi.initialize_state(N, M, choice, spin_up_pol)
-    assert fi.calculate_magnetization(lattice) == N*M
-
 #Test the function that reads the configuration parameters
 def test_read_configuration(filename = ''):
     with pytest.raises(FileNotFoundError):
         config = fi.read_configuration(filename)
         
 #Test the function that simulates lattice evolution
-def test_simulate_wrong_length():
-    lattice = fi.initialize_state(N = 2, M = 3)
-    beta = 1.0
-    times = [1, 2, 3, 4]
+def test_simulate_wrong_length(N = 2, M = 3, beta = 1.0, times = [1, 2, 3, 4]):
+    lattice = fi.initialize_state(N, M)
     with pytest.raises(ValueError):
         states_evolution = fi.simulate(lattice, beta, times)
 
-def test_simulate_correct_length():
-    lattice = fi.initialize_state(N = 2, M = 3)
-    beta = 1.0
-    times = [1, 2, 3, 4, 5]
+def test_simulate_correct_length(N = 2, M = 3, beta = 1.0, times = [1, 2, 3, 4, 5]):
+    lattice = fi.initialize_state(N, M)
     six_states = fi.simulate(lattice, beta, times)
     assert len(six_states) == 6
     
-def test_simulate_negative_times():
-    lattice = fi.initialize_state(N = 2, M = 3)
-    beta = 1.0
-    times = [1, 2, 3, -4, -5]
+def test_simulate_negative_times(N = 2, M = 3, beta = 1.0, times = [1, 2, 3, -4, -5]):
+    lattice = fi.initialize_state(N, M)
     with pytest.raises(ValueError):
         states_evolution = fi.simulate(lattice, beta, times)
 
-def test_simulate_no_time_repetitions():
-    lattice = fi.initialize_state(N = 2, M = 3)
-    beta = 1.0
-    times = [1, 2, 3, 3, 4]
+def test_simulate_no_time_repetitions(N = 2, M = 3, beta = 1.0, times = [1, 2, 3, 3, 4]):
+    lattice = fi.initialize_state(N, M)
     with pytest.raises(ValueError):
         states_evolution = fi.simulate(lattice, beta, times)
 
