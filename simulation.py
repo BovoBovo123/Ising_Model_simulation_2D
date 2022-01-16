@@ -30,7 +30,6 @@ numb_T = configuration.getint('SETTINGS', 'numb_T')
 T_init = configuration.getfloat('SETTINGS', 'T_init')
 T_final = configuration.getfloat('SETTINGS', 'T_final')
 
-choice = configuration.getboolean('SETTINGS', 'choice')
 spin_up_pol = configuration.getfloat('SETTINGS', 'spin_up_pol')
 
 level = configuration.getint('LOGGING', 'level')
@@ -75,7 +74,7 @@ y_mag = []
 logging.basicConfig(level = level)
 
 #Initial state
-initial_state = fi.initialize_state(N, M, choice, spin_up_pol, seed)  
+initial_state = fi.initialize_state(N, M, spin_up_pol, seed)  
 
 
 for n_temp in trange(numb_T, desc = 'Loop over temperature values', position = 0):
