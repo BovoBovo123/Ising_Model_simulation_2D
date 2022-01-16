@@ -298,11 +298,6 @@ def simulate(lattice, beta, times = (5, 10, 50, 100, 1000)):
     Returns
     -------
         array containing the initial lattice spin configuration and the evolved ones.
-    
-    Raises
-    ------
-        ValueError if the number of time instants if different than five, or if
-        any time instant is negative, or if time instants are repeated
 
     """
        
