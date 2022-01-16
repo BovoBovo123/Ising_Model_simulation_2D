@@ -23,7 +23,7 @@ def initialize_state(N, M, spin_up_pol = None, seed = 42):
     M : int
         width of the lattice.
     spin_up_pol : float, optional
-        mean spin up polarization. The default is 0.5.
+        mean spin up polarization. The default is None, that will generate a random lattice.
     seed : int, optional
         sets the seed using np.random.seed(). The default is 42.
 
@@ -33,7 +33,7 @@ def initialize_state(N, M, spin_up_pol = None, seed = 42):
     
     Raises
     ------
-        TYpeError if the choice switch is not a boolean.
+        ValueError is lattice dimensions are < 1.
         
     """
     
