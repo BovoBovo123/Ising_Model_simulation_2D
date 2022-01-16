@@ -172,7 +172,7 @@ def plot_evolution(evolution_states, N, M, times = (5, 10, 50, 100, 1000), savin
         
     Raises
     ------
-        ValueError if the number of time insatnts is not 5, or 
+        ValueError if the number of time instants is not 5, or 
         if any of those in negative or repeated
 
     """
