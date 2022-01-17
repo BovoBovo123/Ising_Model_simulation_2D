@@ -98,7 +98,7 @@ If the simulation were done changing only the parameter nT_show from 0 to 199, t
 
 ![vs steps](https://user-images.githubusercontent.com/79457897/149788979-320e7351-41e4-47c0-b88a-ce1da9479f0b.png)
             
-![vs temp](https://user-images.githubusercontent.com/79457897/149788997-255f7d61-4c4b-4b41-92f3-189b1e11f202.png)
+![evolution](https://user-images.githubusercontent.com/79457897/149789375-1da65147-bad3-46f0-9c63-dab5b1b484bc.png)
 
 It can be seen now that the higher thermal energy makes energy and magnetization have big fluctuations around the mean values from their the plot vs temperature.
             
