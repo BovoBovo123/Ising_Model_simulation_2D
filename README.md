@@ -38,7 +38,7 @@ repeating the last three steps.
 The code below can calculate and plot the energy and magnetization vs temperature and number of steps, as well as showing a representation of the lattice state at different "times" (i.e. number of steps).
 
 # Structure of the project
-## Python libraries used
+## Python 3.9.7 libraries used
 The following libraries are used in the code:
 
 - numpy 1.21.2
@@ -79,12 +79,12 @@ Here properties that the functions must have are tested; all tests are passed.
 The current configuration and simulation files are used to study a 30 x 30 lattice, with spins randomly chosen, in 200 temperature points between 1 and 4; for each one, the lattice is updated 1000 times in order to go towards equilibrium, and then energy and magnetization are averaged over 1000 more steps. 
 After a simulation time of about one hour, these are the resulting plots: 
 
-![temperature_plot](https://user-images.githubusercontent.com/79457897/147859840-90a854ce-d55f-4612-9bdf-c5a397027e3b.png)
-
-![steps_plot](https://user-images.githubusercontent.com/79457897/147859881-54921445-b503-475b-82bf-2c29fa8a61d5.png)
-
-![evolution_plot](https://user-images.githubusercontent.com/79457897/147859884-433225d7-beec-4d92-bb14-d4a6cdcc8095.png)
-
+![vs temp](https://user-images.githubusercontent.com/79457897/149788898-dad20e63-f4c9-4223-a858-eb545f0f9474.png)
+            
+![vs steps](https://user-images.githubusercontent.com/79457897/149788877-fb98f6d6-abb3-4c04-84e6-de20b3ec52b9.png)
+            
+![evolution](https://user-images.githubusercontent.com/79457897/149788820-ccbb6fa0-d025-4fdc-bbf1-206157f925aa.png)
+            
 It can be seen that:
 
 - energy at low temperature shows that the system is in a more stable configuration than at high T;
@@ -95,9 +95,9 @@ It can be seen that:
 The last two plots are for low temperature, more precisely for T = 1.
 If the simulation were done changing only the parameter n_show from 0 to 199, the last two plots would be for T = 4:
 
-![steps_plot](https://user-images.githubusercontent.com/79457897/147860011-92dd8731-33e8-487b-a9bf-633823616ad2.png)
-
-![evolution_plot](https://user-images.githubusercontent.com/79457897/147860015-bb7b9062-6678-467b-a78f-dd469bed1fb8.png)
+![vs steps](https://user-images.githubusercontent.com/79457897/149788979-320e7351-41e4-47c0-b88a-ce1da9479f0b.png)
+            
+![vs temp](https://user-images.githubusercontent.com/79457897/149788997-255f7d61-4c4b-4b41-92f3-189b1e11f202.png)
 
 It can be seen now that the higher thermal energy makes energy and magnetization have big fluctuations around the mean values from their the plot vs temperature.
             
