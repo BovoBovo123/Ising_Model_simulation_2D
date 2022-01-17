@@ -93,6 +93,7 @@ It can be seen that:
 - from a random configuration, spin domain form; the times at which the lattice is shown may be varied to study the complete evolution.
 
 The last two plots are for low temperature, more precisely for T = 1.
+            
 If the simulation were done changing only the parameter n_show from 0 to 199, the last two plots would be for T = 4:
 
 ![vs steps](https://user-images.githubusercontent.com/79457897/149788979-320e7351-41e4-47c0-b88a-ce1da9479f0b.png)
