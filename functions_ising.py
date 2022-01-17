@@ -83,7 +83,6 @@ def metropolis_move(lattice, beta):
     #Length and width for looping
     length = len(lattice)
     width = len(lattice[0])
-    config = lattice.copy()
     
     for i in range(length):
         for j in range(width):
@@ -105,9 +104,9 @@ def metropolis_move(lattice, beta):
                 site_spin *= -1
             
             #Update lattice with new spin state
-            config[x, y] = site_spin
+            lattice[x, y] = site_spin
             
-    return config
+    return lattice
 
 
 def calculate_energy(lattice):
