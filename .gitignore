@@ -1,6 +1,7 @@
 # text and png files (default data and plot files)
 *.txt
 *.png
+*.pdf
 
 #pycache
 __pycache__/
